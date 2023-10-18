@@ -19,10 +19,15 @@ jobs:
           npm install
           npm run build
 
+      - uses: vimtor/action-zip@v1.1
+        with:
+          files: frontend/build/
+          dest: frontend.zip
+
       - uses: actions/upload-artifact@v3
         with:
           name: frontend-build
-          path: frontend/build/
+          path: frontend.zip
 
   release:
     runs-on: ubuntu-latest
@@ -33,11 +38,8 @@ jobs:
           name: frontend-build
           path: build
 
-      - uses: actions/checkout@v3
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v1.0.0
-          files: |
-            build/index.html
-            robots.txt
+          tag_name: v1.0.1
+          files: build/frontend.zip
